@@ -11,7 +11,7 @@ exports.verifyToken = (req, res, next) => {
     if (err) {
       return next(statusResponse.sendForbidden(res, "Token is not valid!"));
     }
-    req.userId = decoded.userId;
+    req.user = decoded;
     next();
   });
 };
@@ -19,7 +19,7 @@ exports.verifyToken = (req, res, next) => {
 exports.verifyUser = (req, res, next) => {
   exports.verifyToken(req, res, () => {
     if (req.user.role === "customer") {
-      next();
+      return next();
     } else {
       return next(statusResponse.sendForbidden(res, "Token is not valid!"));
     }
@@ -29,7 +29,7 @@ exports.verifyUser = (req, res, next) => {
 exports.verifyAdmin = (req, res, next) => {
   exports.verifyToken(req, res, () => {
     if (req.user.role === "admin") {
-      next();
+      return next();
     } else {
       return next(statusResponse.sendForbidden(res, "Admin privileges required!"));
     }

@@ -14,7 +14,10 @@ exports.createAnalysis = async (req, res) => {
 exports.getAllAnalyses = async (req, res) => {
   try {
     const analyses = await Models.Analysis.find();
-    return statusResponse.sendSuccess(res,"Analyses fetched sucessfully",analyses);
+    if(!analyses) {
+      return statusResponse.sendNotFound(res,'Analyses Not Found !')
+    }
+   return  statusResponse.sendSuccess(res,"Analyses fetched sucessfully",analyses);
   } catch (error) {
     return statusResponse.sendServerError(res, error.message);
   }
@@ -27,7 +30,7 @@ exports.getAnalysisById = async (req, res) => {
     if (!analysis) {
         return statusResponse.sendNotFound(res, 'Analysis not found');
     }
-    return statusResponse.sendSuccess(res,"Analysis Fetched Success",analysis)
+   return  statusResponse.sendSuccess(res,"Analysis Fetched Success",analysis)
   } catch (error) {
     return statusResponse.sendServerError(res, error.message);
   }
@@ -41,10 +44,9 @@ exports.updateAnalysisById = async (req, res) => {
       { new: true }
     );
     if (!updatedAnalysis) {
-        return statusResponse.sendNotFound(res, 'Analysis not found');
+         statusResponse.sendNotFound(res, 'Analysis not found');
     }
-    res.json(updatedAnalysis);
-    return statusResponse.sendSuccess(res, "Analysis Updated Successfully")
+     statusResponse.sendSuccess(res, "Analysis Updated Successfully",updatedAnalysis)
   } catch (error) {
     return statusResponse.sendServerError(res, error.message);
   }

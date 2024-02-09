@@ -1,21 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const controllers = require('../controllers');
+const {verifyAdmin, verifyToken } = require('../middlewares/authMiddleware');
 
-// Create a new banner
-router.post('/', controllers.bannerController.createBanner);
+router.post('/',verifyToken,verifyAdmin, controllers.bannerController.createBanner);
 
-// Get all banners
-router.get('/',  controllers.bannerController.getBanners);
+router.get('/',verifyToken,verifyAdmin,  controllers.bannerController.getBanners);
 
-// Get a specific banner by ID
-router.get('/:id',  controllers.bannerController.getBannerById);
+router.get('/:id',verifyToken,verifyAdmin,  controllers.bannerController.getBannerById);
 
-// Update a banner by ID
-router.put('/:id',  controllers.bannerController.updateBanner);
+router.put('/:id', verifyToken,verifyAdmin, controllers.bannerController.updateBanner);
 
-// Delete a banner by ID
-router.delete('/:id',  controllers.bannerController.deleteBanner);
+router.delete('/:id', verifyToken,verifyAdmin, controllers.bannerController.deleteBanner);
 
 
 module.exports = router;

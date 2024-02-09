@@ -1,20 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const controllers = require('../controllers');
+const { verifyToken, verifyUser, verifyAdmin } = require('../middlewares/authMiddleware');
 
-// Create a new advice
-router.post('/', controllers.adviceController.createAdvice);
+router.post('/',verifyToken, verifyAdmin, controllers.adviceController.createAdvice);
 
-// Get all advices
-router.get('/', controllers.adviceController.getAllAdvices);
+router.get('/',verifyToken, controllers.adviceController.getAllAdvices);
 
-// Get advice by ID
-router.get('/:id', controllers.adviceController.getAdviceById);
+router.get('/:id',verifyToken, controllers.adviceController.getAdviceById);
 
-// Update an advice
-router.put('/:id', controllers.adviceController.updateAdvice);
+router.put('/:id',verifyToken, verifyAdmin, controllers.adviceController.updateAdvice);
 
-// Delete an advice
-router.delete('/:id', controllers.adviceController.deleteAdvice);
+router.delete('/:id',verifyToken, verifyAdmin, controllers.adviceController.deleteAdvice);
 
 module.exports = router;

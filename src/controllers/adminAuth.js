@@ -2,13 +2,17 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Models = require('../models');
 const statusResponse = require('../service/responseHandler');
-const { Model } = require('mongoose');
 
 
 
 exports.adminSignup = async (req, res) => {
     try {
         const { username, email, password } = req.body;
+
+        if (!username || !email || !password) {
+            return statusResponse.sendBadRequest(res, 'Username, email, and password are required');
+        }
+
 
         const existingUser = await Models.User.findOne({ email });
         if (existingUser) {
@@ -33,6 +37,10 @@ exports.adminSignup = async (req, res) => {
 exports.adminLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
+        
+        if (!email || !password) {
+            return statusResponse.sendBadRequest(res, 'Email and password are required');
+        }
 
         const user = await Models.User.findOne({ email, role: 'admin' });
 

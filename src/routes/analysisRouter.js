@@ -1,16 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const controllers = require('../controllers');
+const {verifyAdmin, verifyToken } = require('../middlewares/authMiddleware');
 
-router.post('/', controllers.analysisController.createAnalysis);
+router.post('/',verifyToken,verifyAdmin, controllers.analysisController.createAnalysis);
 
-router.get('/',  controllers.analysisController.getAllAnalyses);
+router.get('/',verifyToken,  controllers.analysisController.getAllAnalyses);
 
-router.get('/:id',  controllers.analysisController.getAnalysisById);
+router.get('/:id',verifyToken,  controllers.analysisController.getAnalysisById);
 
-router.put('/:id', controllers.analysisController.updateAnalysisById);
+router.put('/:id',verifyToken,verifyAdmin, controllers.analysisController.updateAnalysisById);
 
-router.put('/:id', controllers.analysisController.deleteAnalysisById);
+router.delete('/:id',verifyToken,verifyAdmin, controllers.analysisController.deleteAnalysisById);
 
 
 module.exports = router;

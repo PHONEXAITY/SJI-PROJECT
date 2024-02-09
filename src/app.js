@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./database');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const cors = require('cors');
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ app.use(session({
       maxAge: 24 * 60 * 60 * 1000, 
     },
   }));
-
+  app.use(cors());
 
 connectDB();
 

@@ -1,20 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const controllers = require('../controllers');
+const {verifyAdmin, verifyToken } = require('../middlewares/authMiddleware');
 
-// Create a new episode
-router.post('/', controllers.epController.createEp);
+router.post('/',verifyToken,verifyAdmin, controllers.epController.createEp);
 
-// Get all episodes
-router.get('/', controllers.epController.getAllEps);
+router.get('/',verifyToken,verifyAdmin, controllers.epController.getAllEps);
 
-// Get episode by ID
-router.get('/:id', controllers.epController.getEpById);
+router.get('/:id',verifyToken,verifyAdmin, controllers.epController.getEpById);
 
-// Update an episode
-router.put('/:id', controllers.epController.updateEp);
+router.put('/:id',verifyToken,verifyAdmin, controllers.epController.updateEp);
 
-// Delete an episode
-router.delete('/:id', controllers.epController.deleteEp);
+router.delete('/:id',verifyToken,verifyAdmin, controllers.epController.deleteEp);
 
 module.exports = router;
