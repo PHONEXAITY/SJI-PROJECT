@@ -88,8 +88,6 @@ exports.getData = async (req, res) => {
       if (!user) {
           return statusResponse.sendNotFound(res, 'User not found');
       }
-
-     return  statusResponse.sendSuccess(res, 'Fetched data Success', user);
   } catch (error) {
       return statusResponse.sendServerError(res, error.message);
   }
