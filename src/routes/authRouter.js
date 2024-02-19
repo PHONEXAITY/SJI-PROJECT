@@ -9,13 +9,13 @@ router.post('/login', controllers.authController.login);
 
 router.put('/update', controllers.authController.changePassword);
 
-router.get('/getData',verifyToken,verifyUser, controllers.authController.getData);
+router.get('/getData',verifyToken, controllers.authController.getData);
 
-router.post('/uploadProfile',verifyToken,verifyUser, controllers.authController.postUploadProfile);
+router.post('/profile',verifyToken, controllers.authController.UploadProfile);
 
-router.get('/getProfile',verifyToken,verifyUser, controllers.authController.getProfile);
+router.get('/get-profile',verifyToken, controllers.authController.fetchProfile);
 
-router.put('/changeProfile', verifyToken,verifyUser, controllers.authController.changeProfile);
+router.put('/changeProfile', verifyToken, controllers.authController.changeProfile);
 
 router.post('/postRegisterPackage',verifyToken,verifyUser, controllers.authController.postRegisterPackage); 
 

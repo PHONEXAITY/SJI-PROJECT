@@ -12,7 +12,6 @@ const formRouter = require('./formRouter');
 const roomRouter = require('./roomRouter');
 
 
-
 const router = express.Router();
 
 router.use('/banners', bannerRouter);

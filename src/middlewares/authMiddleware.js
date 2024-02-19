@@ -1,37 +1,38 @@
 const jwt = require('jsonwebtoken');
 const statusResponse = require('../service/responseHandler');
+const { SECRET_KEY } = require('../config/Golbalkey');
+
 
 exports.verifyToken = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
-    return next(statusResponse.sendUnauthorized(res, "You are not authorized!"));
+    console.log('Token not found');
+    return statusResponse.sendForbidden(res, 'A token is required for authentication');
   }
 
-  jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
-    if (err) {
-      return next(statusResponse.sendForbidden(res, "Token is not valid!"));
-    }
-    req.user = decoded;
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    req.decoded = decoded;
     next();
-  });
-};
-
-exports.verifyUser = (req, res, next) => {
-  exports.verifyToken(req, res, () => {
-    if (req.user.role === "customer") {
-      return next();
-    } else {
-      return next(statusResponse.sendForbidden(res, "Token is not valid!"));
-    }
-  });
+  } catch (err) {
+    return statusResponse.sendUnauthorized(res, 'Invalid token');
+  }
 };
 
 exports.verifyAdmin = (req, res, next) => {
-  exports.verifyToken(req, res, () => {
-    if (req.user.role === "admin") {
-      return next();
-    } else {
-      return next(statusResponse.sendForbidden(res, "Admin privileges required!"));
-    }
-  });
+  const decoded = req.decoded;
+  if (!decoded || decoded.role !== 'admin') { 
+    return statusResponse.sendForbidden(res, 'Not User Role');
+  }
+  next();
 };
+
+exports.verifyUser = (req, res, next) => {
+  const decoded = req.decoded;
+
+  if (!decoded || decoded.role !== 'customer') {
+    return statusResponse.sendForbidden(res, 'You are not Customer Role');
+  }
+  next();
+};
+

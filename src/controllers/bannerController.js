@@ -1,23 +1,24 @@
 const Models = require('../models');
 const statusResponse = require('../service/responseHandler');
+const { ErrorMessage,SuccessMessage } = require('../service/message');
 
 
 exports.createBanner = async (req, res) => {
 try {
       const banner = new Models.Banner(req.body);
       await banner.save();
-     return statusResponse.sendCreated(res, "Banner Created successfully !",banner);
+     return statusResponse.sendCreated(res, SuccessMessage.create ,banner);
     } catch (error) {
-        return statusResponse.sendServerError(res, error.message);
+        return statusResponse.sendServerError(res, ErrorMessage.serverFaild);
     }
 };
   
  exports.getBanners = async (req, res) => {
     try {
       const banners = await Models.Banner.find();
-      return statusResponse.sendSuccess(res, 'Banners fetched successfully', banners);
+      return statusResponse.sendSuccess(res, SuccessMessage.getAll, banners);
     } catch (error) {
-        return statusResponse.sendServerError(res, error.message);
+        return statusResponse.sendServerError(res, ErrorMessage.serverFaild);
     }
   };
   
@@ -25,11 +26,11 @@ try {
     try {
       const banner = await Models.Banner.findById(req.params.id);
       if (!banner) {
-        return statusResponse.sendNotFound(res, 'Banner not found');
+        return statusResponse.sendNotFound(res, ErrorMessage.notFound);
       }
-      return statusResponse.sendSuccess(res, 'Banner fetched successfully', banner);
+      return statusResponse.sendSuccess(res, SuccessMessage.getOne, banner);
     } catch (error) {
-        return statusResponse.sendServerError(res, error.message);
+        return statusResponse.sendServerError(res, ErrorMessage.serverFaild);
     }
   };
   
@@ -41,11 +42,11 @@ exports.updateBanner = async (req, res) => {
         { new: true }
       );
       if (!banner) {
-        return statusResponse.sendNotFound(res, 'Banner not found');
+        return statusResponse.sendNotFound(res, ErrorMessage.notFound);
       }
-      return statusResponse.sendSuccess(res, 'Banner updated successfully', banner);
+      return statusResponse.sendSuccess(res, SuccessMessage.update, banner);
     } catch (error) {
-        return statusResponse.sendServerError(res, error.message);
+        return statusResponse.sendServerError(res, ErrorMessage.serverFaild);
     }
   };
   
@@ -53,10 +54,10 @@ exports.updateBanner = async (req, res) => {
     try {
       const banner = await Models.Banner.findByIdAndDelete(req.params.id);
       if (!banner) {
-        return statusResponse.sendNotFound(res, 'Banner not found');
+        return statusResponse.sendNotFound(res, ErrorMessage.notFound);
       }
-      return statusResponse.sendSuccess(res, 'Banner deleted successfully');
+      return statusResponse.sendSuccess(res, SuccessMessage.delete);
     } catch (error) {
-        return statusResponse.sendServerError(res, error.message);
+        return statusResponse.sendServerError(res, ErrorMessage.serverFaild);
     }
   };
