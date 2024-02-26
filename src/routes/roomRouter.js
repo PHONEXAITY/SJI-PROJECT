@@ -5,9 +5,9 @@ const { verifyAdmin, verifyToken } = require('../middlewares/authMiddleware');
 
 router.post('/', verifyToken, verifyAdmin, controllers.roomController.createRoom);
 
-router.get('/', verifyToken, verifyAdmin, controllers.roomController.getAllRooms);
+router.get('/', verifyToken, controllers.roomController.getAllRooms);
 
-router.get('/:id', verifyToken, verifyAdmin, controllers.roomController.getRoomById);
+router.get('/:id', verifyToken, controllers.roomController.getRoomById);
 
 router.put('/:id', verifyToken, verifyAdmin, controllers.roomController.updateRoom);
 

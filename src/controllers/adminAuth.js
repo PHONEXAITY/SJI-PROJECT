@@ -20,8 +20,15 @@ exports.adminSignup = async (req, res) => {
         const hashedPassword = await service.hashPassword(password);
         const newUser = new Models.User({ username, email, password: hashedPassword, role: 'admin', member: { isActive: true, isFree: false } });
         await newUser.save();
+        
+        const userData = {
+            _id: newUser._id,
+            username: newUser.username,
+            email: newUser.email,
+            member: newUser.member
+        };
 
-        return statusResponse.sendCreated(res, SuccessMessage.register, newUser);
+        return statusResponse.sendCreated(res, SuccessMessage.register, userData);
     } catch (error) {
         console.error(error);
         if (error.code === 11000 && error.keyPattern && error.keyPattern.username) {
@@ -50,8 +57,15 @@ exports.adminLogin = async (req, res) => {
             return statusResponse.sendUnauthorized(res, ErrorMessage.notMatchPassword);
         }
 
+        const userData = {
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            member: user.member
+        };
+
         const token = service.generateToken(user._id, user.role, res);
-        return statusResponse.sendSuccess(res, SuccessMessage.login, token);
+        return statusResponse.sendSuccess(res, SuccessMessage.login, {userData, token});
 
     } catch (error) {
         console.error(error);
@@ -149,3 +163,13 @@ exports.deleteUserAdmin = async (req, res) => {
         return statusResponse.sendServerError(res, ErrorMessage.serverFaild);
     }
 };
+
+exports.logout = async (req, res) => {
+    try {
+      res.clearCookie('token'); 
+      return statusResponse.sendSuccess(res, SuccessMessage.logout, {}); 
+    } catch (err) {
+      console.error(err.message);
+      return statusResponse.sendServerError(res, ErrorMessage.serverFaild); 
+    }
+  };

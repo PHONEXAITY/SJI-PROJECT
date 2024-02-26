@@ -25,7 +25,14 @@ exports.signup = async (req, res) => {
         const newUser = new Models.User({ username, email, password: hashedPassword, member: null });
         await newUser.save();
 
-        return statusResponse.sendCreated(res, SuccessMessage.register, {});
+        const userData = {
+          _id: newUser._id,
+          username: newUser.username,
+          email: newUser.email,
+          member: newUser.member
+      };
+
+        return statusResponse.sendCreated(res, SuccessMessage.register, userData);
     } catch (error) {
         console.error(error);
         if (error.code === 11000 && error.keyPattern && error.keyPattern.username) {
@@ -55,7 +62,13 @@ exports.login = async (req, res) => {
         }
 
         const token = service.generateToken(user._id, user.role ,res);
-        return statusResponse.sendSuccess(res, SuccessMessage.login, token);
+        const userData = {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          member: user.member
+      };
+        return statusResponse.sendSuccess(res, SuccessMessage.login, {userData, token});
     } catch (error) {
         console.error(error);
         return statusResponse.sendServerError(res, ErrorMessage.serverFaild);
@@ -88,21 +101,6 @@ exports.changePassword = async (req, res) => {
     }
 };
 
-/* exports.getData = async (req, res) => {
-    try {
-        const userId = req.decoded;
-  
-        const user = await Models.User.findOne({ _id: userId, role: 'customer' }).select('-password -role -_id');
-  
-        if (!user) {
-            return statusResponse.sendNotFound(res, 'User not found');
-        }
-  
-       return  statusResponse.sendSuccess(res, 'Fetched data Success', user);
-    } catch (error) {
-        return statusResponse.sendServerError(res, error.message);
-    }
-  }; */
   exports.getData = async (req, res) => {
     try {
       const userId = req.decoded.userId; 
@@ -120,33 +118,6 @@ exports.changePassword = async (req, res) => {
     }
   };
   
-  
-    
- /*  exports.postUploadProfile = async (req, res) => {
-    try {
-      const userId = req.decoded.userId;
-      const { profile } = req.body;
-  
-      // Check if profile field is provided
-      if (!profile) {
-        return statusResponse.sendBadRequest(res, 'Profile data is required');
-      }
-  
-      const user = await Models.User.findOne({ _id: userId, role: 'customer' });
-  
-      if (!user) {
-        return statusResponse.sendNotFound(res, 'User not found');
-      }
-  
-      user.profile = profile;
-      await user.save();
-  
-      return statusResponse.sendCreated(res, 'Profile image uploaded successfully', user);
-    } catch (error) {
-      console.error('Error uploading profile:', error);
-      return statusResponse.sendServerError(res, error.message);
-    }
-  }; */
   exports.UploadProfile = async (req, res) => {
     try {
       const userId = req.decoded.userId;
@@ -319,3 +290,18 @@ exports.postRegisterPackage = async (req, res) => {
         return statusResponse.sendServerError(res, ErrorMessage.serverFaild);
     }
 };
+
+exports.logout = async (req, res) => {
+  try {
+    res.clearCookie('token'); 
+    return statusResponse.sendSuccess(res, SuccessMessage.logout, {}); 
+  } catch (err) {
+    console.error(err.message);
+    return statusResponse.sendServerError(res, ErrorMessage.serverFaild); 
+  }
+};
+
+
+
+
+

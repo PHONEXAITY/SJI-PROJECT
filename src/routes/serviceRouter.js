@@ -5,9 +5,9 @@ const { verifyAdmin, verifyToken } = require('../middlewares/authMiddleware');
 
 router.post('/', verifyToken, verifyAdmin, controllers.serviceController.createService);
 
-router.get('/', verifyToken, verifyAdmin, controllers.serviceController.getAllServices);
+router.get('/', verifyToken, controllers.serviceController.getAllServices);
 
-router.get('/:id', verifyToken, verifyAdmin, controllers.serviceController.getServiceById);
+router.get('/:id', verifyToken, controllers.serviceController.getServiceById);
 
 router.put('/:id', verifyToken, verifyAdmin, controllers.serviceController.updateService);
 

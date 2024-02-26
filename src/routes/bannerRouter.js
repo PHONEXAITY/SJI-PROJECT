@@ -5,9 +5,9 @@ const {verifyAdmin, verifyToken } = require('../middlewares/authMiddleware');
 
 router.post('/',verifyToken,verifyAdmin, controllers.bannerController.createBanner);
 
-router.get('/',verifyToken,verifyAdmin,  controllers.bannerController.getBanners);
+router.get('/',verifyToken,  controllers.bannerController.getBanners);
 
-router.get('/:id',verifyToken,verifyAdmin,  controllers.bannerController.getBannerById);
+router.get('/:id',verifyToken,  controllers.bannerController.getBannerById);
 
 router.put('/:id', verifyToken,verifyAdmin, controllers.bannerController.updateBanner);
 

@@ -1,6 +1,7 @@
 const SuccessMessage ={
     create: "Insert Success",
     login: "Login Success",
+    logout:"Logout Success",
     register: "Register Success",
     update: "Update Success",
     delete: "Delete Successful",

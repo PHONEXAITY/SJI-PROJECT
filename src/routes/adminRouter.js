@@ -7,6 +7,8 @@ router.post('/signup', controllers.adminAuth.adminSignup);
 
 router.post('/login', controllers.adminAuth.adminLogin);
 
+router.post('/logout', verifyToken, controllers.adminAuth.logout);
+
 router.put('/changePassword', verifyToken,verifyAdmin, controllers.adminAuth.adminChangePassword);
 
 router.get('/get-Customer',verifyToken,verifyAdmin,  controllers.adminAuth.getUserCustomer);
@@ -16,6 +18,8 @@ router.get('/getAll', verifyToken, verifyAdmin, controllers.adminAuth.getAllUser
 router.delete('/:id', verifyToken, verifyAdmin, controllers.adminAuth.deleteUserCustomer);
 
 router.delete('/admin/:id', verifyToken, verifyAdmin, controllers.adminAuth.deleteUserAdmin);
+
+
 
 
 module.exports = router;

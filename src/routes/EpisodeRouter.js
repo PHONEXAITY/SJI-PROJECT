@@ -5,9 +5,9 @@ const {verifyAdmin, verifyToken } = require('../middlewares/authMiddleware');
 
 router.post('/',verifyToken,verifyAdmin, controllers.epController.createEp);
 
-router.get('/',verifyToken,verifyAdmin, controllers.epController.getAllEps);
+router.get('/',verifyToken, controllers.epController.getAllEps);
 
-router.get('/:id',verifyToken,verifyAdmin, controllers.epController.getEpById);
+router.get('/:id',verifyToken, controllers.epController.getEpById);
 
 router.put('/:id',verifyToken,verifyAdmin, controllers.epController.updateEp);
 
