@@ -29,10 +29,13 @@ exports.signup = async (req, res) => {
           _id: newUser._id,
           username: newUser.username,
           email: newUser.email,
-          member: newUser.member
+          member: newUser.member,
       };
+      const newData = Object.assign(
+        JSON.parse(JSON.stringify(userData)),
+      );
 
-        return statusResponse.sendCreated(res, SuccessMessage.register, userData);
+        return statusResponse.sendCreated(res, SuccessMessage.register, newData);
     } catch (error) {
         console.error(error);
         if (error.code === 11000 && error.keyPattern && error.keyPattern.username) {
@@ -66,9 +69,13 @@ exports.login = async (req, res) => {
           _id: user._id,
           username: user.username,
           email: user.email,
-          member: user.member
+          member: user.member,
+          token
       };
-        return statusResponse.sendSuccess(res, SuccessMessage.login, {userData, token});
+      const newData = Object.assign(
+        JSON.parse(JSON.stringify(userData)),
+      );
+        return statusResponse.sendSuccess(res, SuccessMessage.login,newData);
     } catch (error) {
         console.error(error);
         return statusResponse.sendServerError(res, ErrorMessage.serverFaild);

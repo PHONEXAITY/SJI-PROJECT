@@ -27,8 +27,11 @@ exports.adminSignup = async (req, res) => {
             email: newUser.email,
             member: newUser.member
         };
+        const newData = Object.assign(
+            JSON.parse(JSON.stringify(userData)),
+          );
 
-        return statusResponse.sendCreated(res, SuccessMessage.register, userData);
+        return statusResponse.sendCreated(res, SuccessMessage.register, newData);
     } catch (error) {
         console.error(error);
         if (error.code === 11000 && error.keyPattern && error.keyPattern.username) {
@@ -56,16 +59,21 @@ exports.adminLogin = async (req, res) => {
         if (!isPasswordValid) {
             return statusResponse.sendUnauthorized(res, ErrorMessage.notMatchPassword);
         }
-
-        const userData = {
+        
+        const token = service.generateToken(user._id, user.role, res);
+        const data = {
             _id: user._id,
             username: user.username,
             email: user.email,
-            member: user.member
-        };
+            member: user.member,
+            token
+        }; 
+        const newData = Object.assign(
+            JSON.parse(JSON.stringify(data)),
+          );
+    
 
-        const token = service.generateToken(user._id, user.role, res);
-        return statusResponse.sendSuccess(res, SuccessMessage.login, {userData, token});
+        return statusResponse.sendSuccess(res, SuccessMessage.login, newData);
 
     } catch (error) {
         console.error(error);
